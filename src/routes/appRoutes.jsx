@@ -1,8 +1,8 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import App from "@/App";
-import SignUp from "@/pages/SignUp";
-import Login from "@/pages/Login";
+import SignUpPage from "@/pages/SignUpPage";
+import LoginPage from "@/pages/LoginPage";
 
 const appRoutes = createBrowserRouter([
   {
@@ -17,8 +17,8 @@ const appRoutes = createBrowserRouter([
       {
         path: "auth",
         children: [
-          { path: "signup", element: <SignUp /> },
-          { path: "login", element: <Login /> },
+          { path: "signup", element: <SignUpPage /> },
+          { path: "login", element: <LoginPage /> },
         ],
       },
     ],
