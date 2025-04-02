@@ -1,19 +1,63 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { ID } from "appwrite";
+
+import { account } from "@/services/appWrite";
+import { clearUser, setUser } from "../slices/authSlice";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://pokeapi.co/api/v2/" }),
+  baseQuery: fetchBaseQuery(), // No actual base URL since we use Appwrite SDK
   endpoints: (builder) => ({
-    signUp: builder.mutation({
-      async queryFn({ email, password, username }) {
+    register: builder.mutation({
+      async queryFn({ email, password, userName }, { dispatch }) {
         try {
-          // Create user account in Appwrite
           const user = await account.create(
-            "unique()",
+            ID.unique(),
             email,
             password,
-            username,
+            userName,
           );
+          dispatch(setUser(user)); // Store user in Redux state
+          return { data: user };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+    }),
+
+    login: builder.mutation({
+      async queryFn({ email, password }, { dispatch }) {
+        try {
+          const session = await account.createEmailPasswordSession(
+            email,
+            password,
+          );
+          const user = await account.get();
+          dispatch(setUser(user)); // Store user in Redux state
+          return { data: session };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+    }),
+
+    logout: builder.mutation({
+      async queryFn(_, { dispatch }) {
+        try {
+          await account.deleteSession("current");
+          dispatch(clearUser()); // Clear user from Redux state
+          return { data: "Logged out successfully" };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+    }),
+
+    getCurrentUser: builder.query({
+      async queryFn(_, { dispatch }) {
+        try {
+          const user = await account.get();
+          dispatch(setUser(user)); // Store user in Redux state
           return { data: user };
         } catch (error) {
           return { error: error.message };
@@ -23,4 +67,9 @@ export const authApi = createApi({
   }),
 });
 
-export const { useSignUpMutation } = authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useGetCurrentUserQuery,
+} = authApi;
