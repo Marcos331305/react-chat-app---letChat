@@ -13,6 +13,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useLogoutMutation } from "@/redux/api/authApiSlice";
 
 // Define validation schema
 const loginSchema = z.object({
@@ -21,6 +22,7 @@ const loginSchema = z.object({
 });
 
 export default function LoginPage() {
+  const [login, { data, isLoading, error }] = useLogoutMutation();
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -29,8 +31,12 @@ export default function LoginPage() {
     },
   });
 
-  function onSubmit(values) {
-    console.log("Form Data:", values);
+  async function onSubmit({ email, password }) {
+    console.log("Form Data:", { email, password });
+    await login({ email, password });
+    if (error || data) {
+      console.log(error || data);
+    }
   }
 
   return (

@@ -13,6 +13,10 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  useRegisterMutation,
+  useSendVerificationEmailMutation,
+} from "@/redux/api/authApiSlice";
 
 // Define validation schema
 const signUpSchema = z.object({
@@ -38,6 +42,8 @@ const signUpSchema = z.object({
 });
 
 export default function SignUpPage() {
+  const [register] = useRegisterMutation();
+  const [sendVerificationEmail] = useSendVerificationEmailMutation();
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -47,9 +53,18 @@ export default function SignUpPage() {
     },
   });
 
-  function onSubmit(values) {
-    console.log("Form Data:", values);
-  }
+  const onSubmit = async ({ email, password, username }) => {
+    try {
+      const user = await register({ email, password, username }).unwrap();
+      console.log("User created:", user);
+
+      // After successful registration, send a verification email
+      await sendVerificationEmail().unwrap();
+      alert("Check your email for verification.");
+    } catch (err) {
+      console.error("Registration failed:", err);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">

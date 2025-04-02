@@ -9,13 +9,13 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery(), // No actual base URL since we use Appwrite SDK
   endpoints: (builder) => ({
     register: builder.mutation({
-      async queryFn({ email, password, userName }, { dispatch }) {
+      async queryFn({ email, password, username }, { dispatch }) {
         try {
           const user = await account.create(
             ID.unique(),
             email,
             password,
-            userName,
+            username,
           );
           dispatch(setUser(user)); // Store user in Redux state
           return { data: user };
@@ -64,6 +64,30 @@ export const authApi = createApi({
         }
       },
     }),
+
+    sendVerificationEmail: builder.mutation({
+      async queryFn() {
+        try {
+          await account.createVerification(
+            "http://localhost:5173/verify-email",
+          ); // Send verification email
+          return { data: "Verification email sent!" };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+    }),
+
+    verifyUser: builder.mutation({
+      async queryFn({ userId, secret }) {
+        try {
+          await account.updateVerification(userId, secret); // Confirm email verification
+          return { data: "Email verified successfully!" };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+    }),
   }),
 });
 
@@ -72,4 +96,6 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useGetCurrentUserQuery,
+  useSendVerificationEmailMutation,
+  useVerifyUserMutation,
 } = authApi;

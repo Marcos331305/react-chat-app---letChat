@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "@/App";
 import SignUpPage from "@/pages/SignUpPage";
 import LoginPage from "@/pages/LoginPage";
+import VerifyEmailPage from "@/pages/VerifyEmailPage";
 
 const appRoutes = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ const appRoutes = createBrowserRouter([
         children: [
           { path: "signup", element: <SignUpPage /> },
           { path: "login", element: <LoginPage /> },
+          { path: "verify-email", element: <VerifyEmailPage /> },
         ],
       },
     ],
