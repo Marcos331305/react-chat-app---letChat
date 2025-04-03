@@ -17,6 +17,7 @@ export const authApi = createApi({
             password,
             username,
           );
+          console.log(user);
           dispatch(setUser(user)); // Store user in Redux state
           return { data: user };
         } catch (error) {
@@ -33,6 +34,7 @@ export const authApi = createApi({
             password,
           );
           const user = await account.get();
+          console.log(user);
           dispatch(setUser(user)); // Store user in Redux state
           return { data: session };
         } catch (error) {
