@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import {
   Form,
@@ -13,7 +15,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useLogoutMutation } from "@/redux/api/authApiSlice";
+import { useLoginMutation } from "@/redux/api/authApiSlice";
 
 // Define validation schema
 const loginSchema = z.object({
@@ -22,7 +24,9 @@ const loginSchema = z.object({
 });
 
 export default function LoginPage() {
-  const [login, { data, isLoading, error }] = useLogoutMutation();
+  const [login, { data, isLoading, error }] = useLoginMutation();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -31,11 +35,17 @@ export default function LoginPage() {
     },
   });
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/letchat", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
   async function onSubmit({ email, password }) {
-    console.log("Form Data:", { email, password });
-    await login({ email, password });
-    if (error || data) {
-      console.log(error || data);
+    try {
+      await login({ email, password }).unwrap();
+    } catch (error) {
+      console.error("Login failed:", error);
     }
   }
 

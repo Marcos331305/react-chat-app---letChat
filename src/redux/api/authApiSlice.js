@@ -18,7 +18,6 @@ export const authApi = createApi({
             username,
           );
           console.log(user);
-          dispatch(setUser(user)); // Store user in Redux state
           return { data: user };
         } catch (error) {
           return { error: error.message };
