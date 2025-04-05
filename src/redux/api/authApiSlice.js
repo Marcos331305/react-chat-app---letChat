@@ -7,6 +7,7 @@ import { clearUser, setUser } from "../slices/authSlice";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery(), // No actual base URL since we use Appwrite SDK
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     register: builder.mutation({
       async queryFn({ email, password, username }, { dispatch }) {
@@ -52,6 +53,7 @@ export const authApi = createApi({
           return { error: error.message };
         }
       },
+      invalidatesTags: ["User"],
     }),
 
     getCurrentUser: builder.query({
@@ -64,6 +66,7 @@ export const authApi = createApi({
           return { error: error.message };
         }
       },
+      providesTags: ["User"],
     }),
 
     sendVerificationEmail: builder.mutation({

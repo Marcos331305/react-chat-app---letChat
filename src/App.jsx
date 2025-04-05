@@ -6,14 +6,14 @@ import AppLayout from "./layout/AppLayout";
 import { useGetCurrentUserQuery } from "./redux/api/authApiSlice";
 
 const App = () => {
-  const { isLoading, error } = useGetCurrentUserQuery();
+  const { isLoading, isError } = useGetCurrentUserQuery();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (error) {
+    if (isError) {
       navigate("/auth/login", { replace: true });
     }
-  }, [error, navigate]);
+  }, [isError, navigate]);
 
   if (isLoading) return <div>Loading...</div>;
 

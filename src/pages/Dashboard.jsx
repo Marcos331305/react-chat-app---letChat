@@ -1,13 +1,20 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { useLogoutMutation } from "@/redux/api/authApiSlice";
 
 const Dashboard = () => {
   const [logout, { isLoading, error }] = useLogoutMutation();
+  const navigate = useNavigate();
 
   const logoutUser = async () => {
-    await logout();
+    try {
+      await logout().unwrap();
+
+      navigate("/auth/login", { replace: true });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
   return (
     <>
