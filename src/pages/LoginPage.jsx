@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import {
@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useLoginMutation } from "@/redux/api/authApiSlice";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 // Define validation schema
 const loginSchema = z.object({
@@ -68,6 +69,8 @@ export default function LoginPage() {
                       type="email"
                       placeholder="Enter your email"
                       {...field}
+                      disabled={isLoading}
+                      className="disabled:opacity-100 "
                     />
                     <FormMessage />
                   </FormItem>
@@ -83,13 +86,20 @@ export default function LoginPage() {
                       type="password"
                       placeholder="Enter your password"
                       {...field}
+                      disabled={isLoading}
+                      className="disabled:opacity-100 "
                     />
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Log In
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full flex items-center justify-center px-4 py-2 text-white rounded disabled:opacity-100 disabled:bg-[#2F2F32]"
+              >
+                {isLoading && <LoadingSpinner className="mr-2 h-4 w-4" />}
+                {isLoading ? "Processing..." : "Log In"}
               </Button>
             </form>
           </Form>

@@ -18,7 +18,6 @@ export const authApi = createApi({
             password,
             username,
           );
-          console.log(user);
           return { data: user };
         } catch (error) {
           return { error: error.message };
@@ -34,7 +33,13 @@ export const authApi = createApi({
             password,
           );
           const user = await account.get();
-          console.log(user);
+
+          // Block login if email is not verified
+          if (!user.emailVerification) {
+            await account.deleteSession("current"); // Force logout
+            throw new Error("Please verify your email before logging in.");
+          }
+
           dispatch(setUser(user)); // Store user in Redux state
           return { data: session };
         } catch (error) {
