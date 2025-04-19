@@ -12,13 +12,16 @@ export const authApi = createApi({
     register: builder.mutation({
       async queryFn({ email, password, username }, { dispatch }) {
         try {
-          const user = await account.create(
-            ID.unique(),
-            email,
-            password,
-            username,
-          );
-          return { data: user };
+          await account.create(ID.unique(), email, password, username);
+
+          await account.createEmailPasswordSession(email, password); // Create session after registration
+
+          await account.createVerification(
+            "http://localhost:5173/auth/verify-email",
+          ); // Send verification email
+
+          await account.deleteSession("current");
+          return { data: "Registration successful! Verification email sent." };
         } catch (error) {
           return { error: error.message };
         }
@@ -65,6 +68,11 @@ export const authApi = createApi({
       async queryFn(_, { dispatch }) {
         try {
           const user = await account.get();
+
+          if (!user.emailVerification) {
+            return { error: "Email not verified" };
+          }
+
           dispatch(setUser(user)); // Store user in Redux state
           return { data: user };
         } catch (error) {

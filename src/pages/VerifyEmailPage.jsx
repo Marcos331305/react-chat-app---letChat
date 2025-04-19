@@ -25,12 +25,13 @@ const VerifyEmailPage = () => {
       {isSuccess && (
         <h2 className="text-2xl font-semibold">
           Email Verified! Now you can log in with your account.{" "}
-          <Link to="/auth/login" className="text-blue-500" />
+          <Link to="/auth/login" className="text-blue-600 hover:underline" />
+          Login
         </h2>
       )}
       {isError && (
         <h2 className="text-2xl font-semibold text-red-500">
-          Verification failed. Link may be invalid or expired.
+          Verification failed. Link maybe already visited or expired.
         </h2>
       )}
     </div>

@@ -11,7 +11,7 @@ const App = () => {
 
   useEffect(() => {
     if (isError) {
-      navigate("/auth/login", { replace: true });
+      navigate("/auth/signup", { replace: true });
     }
   }, [isError, navigate]);
 

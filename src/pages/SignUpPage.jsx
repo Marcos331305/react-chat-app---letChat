@@ -43,7 +43,6 @@ const signUpSchema = z.object({
 
 export default function SignUpPage() {
   const [register] = useRegisterMutation();
-  const [sendVerificationEmail] = useSendVerificationEmailMutation();
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -58,8 +57,6 @@ export default function SignUpPage() {
       const user = await register({ email, password, username }).unwrap();
       console.log("User created:", user);
 
-      // After successful registration, send a verification email
-      await sendVerificationEmail().unwrap();
       alert("Check your email for verification.");
     } catch (err) {
       console.error("Registration failed:", err);

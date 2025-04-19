@@ -103,14 +103,22 @@ export default function LoginPage() {
               </Button>
             </form>
           </Form>
-          {/* ForgotPassword Link */}
-          <p className="mt-4 text-center text-sm">
-            Forgot your password?
-            <Link to="/auth/login" className="text-blue-600 hover:underline">
-              {" "}
-              Reset
-            </Link>
-          </p>
+          <div className="mt-4 flex justify-between">
+            {/* ForgotPassword Link */}
+            <p className="text-sm">
+              Forgot your password?
+              <Link to="/auth/login" className="text-blue-600 hover:underline">
+                {" "}
+                Reset
+              </Link>
+            </p>
+            {/* Register Link */}
+            <p className="text-sm">
+              <Link to="/auth/signup" className="text-blue-600 hover:underline">
+                Register
+              </Link>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
