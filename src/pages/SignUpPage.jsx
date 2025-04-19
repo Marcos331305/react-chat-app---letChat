@@ -13,10 +13,9 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  useRegisterMutation,
-  useSendVerificationEmailMutation,
-} from "@/redux/api/authApiSlice";
+import { useRegisterMutation } from "@/redux/api/authApiSlice";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { toast } from "sonner";
 
 // Define validation schema
 const signUpSchema = z.object({
@@ -42,7 +41,7 @@ const signUpSchema = z.object({
 });
 
 export default function SignUpPage() {
-  const [register] = useRegisterMutation();
+  const [register, { isLoading }] = useRegisterMutation();
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -54,12 +53,16 @@ export default function SignUpPage() {
 
   const onSubmit = async ({ email, password, username }) => {
     try {
-      const user = await register({ email, password, username }).unwrap();
-      console.log("User created:", user);
+      await register({ email, password, username }).unwrap();
 
-      alert("Check your email for verification.");
-    } catch (err) {
-      console.error("Registration failed:", err);
+      toast.success(
+        "Registration successful! Verification email sent at your provided Gmail.",
+      );
+
+      form.reset();
+    } catch (error) {
+      toast.error(error || "Registration failed.");
+      form.reset();
     }
   };
 
@@ -116,7 +119,8 @@ export default function SignUpPage() {
                 )}
               />
               <Button type="submit" className="w-full">
-                Sign Up
+                {isLoading && <LoadingSpinner className="mr-2 h-4 w-4" />}
+                {isLoading ? "Processing..." : "Sign Up"}
               </Button>
             </form>
           </Form>

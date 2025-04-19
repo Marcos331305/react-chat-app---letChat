@@ -2,8 +2,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -25,7 +26,7 @@ const loginSchema = z.object({
 });
 
 export default function LoginPage() {
-  const [login, { data, isLoading, error }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const navigate = useNavigate();
   const form = useForm({
@@ -46,7 +47,7 @@ export default function LoginPage() {
     try {
       await login({ email, password }).unwrap();
     } catch (error) {
-      console.error("Login failed:", error);
+      toast.error(error || "Login failed.");
     }
   }
 
