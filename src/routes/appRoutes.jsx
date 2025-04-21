@@ -15,6 +15,10 @@ const appRoutes = createBrowserRouter([
     children: [
       //  Private Routes (Only for authenticated users)
       {
+        index: true,
+        element: <Navigate to="/letchat" replace />,
+      },
+      {
         path: "letchat",
         element: <ProtectedRoute />, // Protect private routes
         children: [{ index: true, element: <Dashboard /> }],

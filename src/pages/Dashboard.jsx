@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { useLogoutMutation } from "@/redux/api/authApiSlice";
+import ChatsHeader from "@/components/chat/ChatsHeader";
+import ChatList from "@/components/chat/ChatList";
 
 const Dashboard = () => {
   const [logout, { isLoading, error }] = useLogoutMutation();
@@ -17,12 +18,13 @@ const Dashboard = () => {
     }
   };
   return (
-    <>
-      <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 px-4">
-        <div>welcome to Dashboard</div>
-        <Button onClick={logoutUser}>logout</Button>
-      </div>
-    </>
+    <div className="flex flex-col h-screen p-4 gap-4 border-2 border-red-400">
+      {/* Header (fixed height) */}
+      <ChatsHeader />
+
+      {/* Chat list grows to fill remaining height */}
+      <ChatList />
+    </div>
   );
 };
 
