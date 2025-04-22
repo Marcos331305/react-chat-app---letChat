@@ -40,7 +40,7 @@ const signUpSchema = z.object({
     ),
 });
 
-export default function SignUpPage() {
+export default function SignUp() {
   const [register, { isLoading }] = useRegisterMutation();
   const form = useForm({
     resolver: zodResolver(signUpSchema),

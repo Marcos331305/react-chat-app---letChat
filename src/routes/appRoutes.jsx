@@ -1,10 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import App from "@/App";
-import SignUpPage from "@/pages/SignUpPage";
-import LoginPage from "@/pages/LoginPage";
-import VerifyEmailPage from "@/pages/VerifyEmailPage";
-import Dashboard from "@/pages/Dashboard";
+import SignUp from "@/pages/SignUp";
+import Login from "@/pages/Login";
+import VerifyEmail from "@/pages/VerifyEmail";
+import ChatHome from "@/pages/ChatHome";
+import ChatWindow from "@/pages/ChatWindow";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
@@ -21,7 +22,13 @@ const appRoutes = createBrowserRouter([
       {
         path: "letchat",
         element: <ProtectedRoute />, // Protect private routes
-        children: [{ index: true, element: <Dashboard /> }],
+        children: [
+          { index: true, element: <ChatHome /> },
+          {
+            path: "c/:id",
+            element: <ChatWindow />,
+          },
+        ],
       },
     ],
   },
@@ -30,9 +37,9 @@ const appRoutes = createBrowserRouter([
     path: "auth",
     element: <PublicRoute />, // Wrap auth routes inside PublicRoute
     children: [
-      { path: "signup", element: <SignUpPage /> },
-      { path: "login", element: <LoginPage /> },
-      { path: "verify-email", element: <VerifyEmailPage /> },
+      { path: "signup", element: <SignUp /> },
+      { path: "login", element: <Login /> },
+      { path: "verify-email", element: <VerifyEmail /> },
     ],
   },
 ]);

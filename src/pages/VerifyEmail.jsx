@@ -5,7 +5,7 @@ import { Link, useSearchParams } from "react-router-dom";
 
 import { useVerifyUserMutation } from "@/redux/api/authApiSlice";
 
-const VerifyEmailPage = () => {
+const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const [verifyUser, { isLoading, isError, isSuccess }] =
     useVerifyUserMutation();
@@ -38,4 +38,4 @@ const VerifyEmailPage = () => {
   );
 };
 
-export default VerifyEmailPage;
+export default VerifyEmail;

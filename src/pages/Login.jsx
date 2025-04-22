@@ -25,7 +25,7 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required."),
 });
 
-export default function LoginPage() {
+export default function Login() {
   const [login, { isLoading }] = useLoginMutation();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const navigate = useNavigate();
