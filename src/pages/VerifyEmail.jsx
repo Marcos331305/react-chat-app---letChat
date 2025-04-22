@@ -24,8 +24,8 @@ const VerifyEmail = () => {
       {isLoading && <h2 className="text-2xl font-semibold">Verifying...</h2>}
       {isSuccess && (
         <h2 className="text-2xl font-semibold">
-          Email Verified! Now you can log in with your account.{" "}
-          <Link to="/auth/login" className="text-blue-600 hover:underline" />
+          Email Verified! Now you can logIn with your account.
+          {/* <Link to="/auth/login" className="text-blue-600 hover:underline" /> */}
           Login
         </h2>
       )}

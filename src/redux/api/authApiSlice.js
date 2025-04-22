@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ID } from "appwrite";
 
+import { addUserToUsersCollection } from "@/services/appWriteUtils";
+
 import { account } from "@/services/appWrite";
 import { clearUser, setUser } from "../slices/authSlice";
 
@@ -12,13 +14,21 @@ export const authApi = createApi({
     register: builder.mutation({
       async queryFn({ email, password, username }, { dispatch }) {
         try {
-          await account.create(ID.unique(), email, password, username);
+          const user = await account.create(
+            ID.unique(),
+            email,
+            password,
+            username,
+          );
 
           await account.createEmailPasswordSession(email, password); // Create session after registration
 
           await account.createVerification(
             "http://localhost:5173/auth/verify-email",
           ); // Send verification email
+
+          // Save the user's details to the users collection for chat purposes
+          await addUserToUsersCollection(user.$id, username);
 
           await account.deleteSession("current");
           return { data: "Registration successful! Verification email sent." };
