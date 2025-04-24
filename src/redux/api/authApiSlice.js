@@ -1,9 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { account } from "@/services/appWrite";
 import { ID } from "appwrite";
 
 import { addUserToUsersCollection } from "@/services/appWriteUtils";
-
-import { account } from "@/services/appWrite";
 import { clearUser, setUser } from "../slices/authSlice";
 
 export const authApi = createApi({
