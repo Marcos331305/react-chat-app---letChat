@@ -1,12 +1,29 @@
+import { useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { useLogoutMutation } from "@/redux/api/authApiSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import useDebounce from "@/hooks/useDebounce";
 
-const ChatsHeader = ({ onLogout, onSearch }) => {
+const ChatsHeader = ({ searchUser, searchText, setSearchText }) => {
+  const currentUserId = useSelector((state) => state.auth.user.$id);
   const [logout, { isLoading }] = useLogoutMutation();
   const navigate = useNavigate();
+  const debouncedSearchTerm = useDebounce(searchText, 300);
+
+  // handling searchUser with debouncing
+  useEffect(() => {
+    if (debouncedSearchTerm.trim().length >= 3) {
+      // userSearch will be triggered here
+      searchUser({
+        searchText: debouncedSearchTerm,
+        currentUserId: currentUserId,
+      });
+    }
+  }, [debouncedSearchTerm]);
 
   const logoutUser = async () => {
     try {
@@ -32,7 +49,7 @@ const ChatsHeader = ({ onLogout, onSearch }) => {
         <Input
           type="text"
           placeholder="Search users to chat..."
-          onChange={(e) => onSearch(e.target.value)}
+          onChange={(e) => setSearchText(e.target.value)}
           className="w-full sm:w-1/2"
         />
       </div>

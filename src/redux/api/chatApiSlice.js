@@ -25,7 +25,30 @@ export const chatApi = createApi({
         }
       },
     }),
+    searchUser: builder.query({
+      async queryFn(
+        { searchText, currentUserId },
+        _queryApi,
+        _extraOptions,
+        _baseQuery,
+      ) {
+        try {
+          const response = await databases.listDocuments(
+            import.meta.env.VITE_APPWRITE_CHATDB_ID, // Database ID
+            import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID, // Collection ID
+            [
+              Query.startsWith("username", searchText),
+              // optionally exclude current user
+              Query.notEqual("userId", currentUserId),
+            ],
+          );
+          return { data: response.documents };
+        } catch (err) {
+          return { error: { status: "CUSTOM_ERROR", data: err.message } };
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetChatsByUserIdQuery } = chatApi;
+export const { useGetChatsByUserIdQuery, useLazySearchUserQuery } = chatApi;
