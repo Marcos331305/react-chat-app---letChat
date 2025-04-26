@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGetChatsByUserIdQuery } from "@/redux/api/chatApiSlice";
+import Chat from "./Chat";
 
 const ChatList = ({ searchResults, isSearching }) => {
   const currentUserId = useSelector((state) => state.auth.user.$id);
@@ -14,19 +15,7 @@ const ChatList = ({ searchResults, isSearching }) => {
         <ul className="divide-y">
           {listToRender?.length > 0 ? (
             listToRender.map((item) => (
-              <li
-                key={item?.id || item?.userId}
-                className="p-4 hover:bg-muted cursor-pointer transition"
-              >
-                <p className="font-medium text-sm">
-                  {item?.otherUserName || item?.username}
-                </p>
-                {item?.lastMsg && (
-                  <p className="text-xs text-muted-foreground truncate">
-                    {item.lastMsg}
-                  </p>
-                )}
-              </li>
+              <Chat item={item} key={item?.id || item?.userId} />
             ))
           ) : (
             <div className="p-4 text-center text-muted-foreground">

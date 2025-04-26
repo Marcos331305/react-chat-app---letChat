@@ -25,7 +25,7 @@ const appRoutes = createBrowserRouter([
         children: [
           { index: true, element: <ChatHome /> },
           {
-            path: "c/:id",
+            path: "c/:id?", // Making the id parameter optional with ?
             element: <ChatWindow />,
           },
         ],
