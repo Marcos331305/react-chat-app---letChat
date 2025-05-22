@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import "react-chat-elements/dist/main.css";
 
 import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";

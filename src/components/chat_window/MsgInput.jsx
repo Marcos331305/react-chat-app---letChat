@@ -9,7 +9,6 @@ const MsgInput = () => {
   const currentUserId = useSelector((state) => state.auth.user.$id);
   const receiverUserId = useSelector((state) => state.chat.targetUser?.userId);
   const handleSendClick = (msg) => {
-    console.log(msg);
     const trimmedMsg = msg.trim();
     if (trimmedMsg) {
       console.log("Sending message:", trimmedMsg);

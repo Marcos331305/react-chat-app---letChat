@@ -6,7 +6,7 @@ const ChatArea = ({ isLoading }) => {
   const currentUserId = useSelector((state) => state.auth.user.$id);
   const messages = useSelector((state) => state.messages.messages);
   if (messages) {
-    console.log(messages);
+    console.log("Redux Messages: ", messages);
   }
   return (
     <div className="flex flex-col space-y-4">
