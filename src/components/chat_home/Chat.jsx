@@ -28,7 +28,7 @@ const Chat = ({ item }) => {
   return (
     <li
       onClick={handleSearchSelect}
-      className="p-4 hover:bg-muted cursor-pointer transition border-1 border-blue-600"
+      className="p-4 hover:bg-muted cursor-pointer transition"
     >
       <p className="font-medium text-sm">
         {item?.otherUserName || item?.username}

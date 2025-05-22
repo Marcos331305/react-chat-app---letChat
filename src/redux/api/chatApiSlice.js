@@ -19,6 +19,7 @@ export const chatApi = createApi({
             import.meta.env.VITE_APPWRITE_CHATS_COLLECTION_ID, // Collection ID
             [Query.contains("userIDs", [currentUserId])],
           );
+          console.log(response.documents);
           return { data: response.documents };
         } catch (error) {
           console.error(error.message);
@@ -45,6 +46,7 @@ export const chatApi = createApi({
             ],
           );
           dispatch(setTargetUser(response.documents[0]));
+          console.log(response.documents);
           return { data: response.documents };
         } catch (err) {
           return { error: { status: "CUSTOM_ERROR", data: err.message } };
@@ -73,11 +75,13 @@ export const chatApi = createApi({
           }
 
           // If no existing chat, create one
+          const newChatId = ID.unique();
           const newChat = await databases.createDocument(
             import.meta.env.VITE_APPWRITE_CHATDB_ID, // Database ID
             import.meta.env.VITE_APPWRITE_CHATS_COLLECTION_ID, // Collection ID
+            newChatId, // Document ID
             {
-              id: ID.unique(),
+              id: newChatId,
               userIDs,
               createdAt: new Date().toISOString(),
               otherUserName: targetUserName,
