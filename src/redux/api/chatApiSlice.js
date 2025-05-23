@@ -58,6 +58,9 @@ export const chatApi = createApi({
         { currentUserId, targetUserId, targetUserName },
         { dispatch },
       ) {
+        console.log("getOrCreateChat called");
+        console.log("currentUserId", currentUserId);
+        console.log("targetUserId", targetUserId);
         const userIDs = [currentUserId, targetUserId].sort(); // ensure consistent order
 
         try {

@@ -7,9 +7,9 @@ import { useGetOrCreateChatMutation } from "@/redux/api/chatApiSlice";
 const Chat = ({ item }) => {
   const navigate = useNavigate();
   const currentUserId = useSelector((state) => state.auth.user.$id);
-  const targetUserId = useSelector((state) => state.chat.targetUser.userId);
+  const targetUserId = useSelector((state) => state.chat.targetUser?.userId);
   const targetUserName = useSelector(
-    (state) => state.chat.targetUser.otherUserName,
+    (state) => state.chat.targetUser?.otherUserName,
   );
   const [getOrCreateChat, { isLoading, error }] = useGetOrCreateChatMutation();
 
