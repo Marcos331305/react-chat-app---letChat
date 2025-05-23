@@ -72,9 +72,9 @@ export const chatApi = createApi({
           );
 
           if (res.total > 0) {
-            const existingChat = res.documents[0];
-            dispatch(setActiveChatId(existingChat)); // optional
-            return { data: existingChat };
+            const existingChatId = res.documents[0].id;
+            dispatch(setActiveChatId(existingChatId)); // optional
+            return { data: existingChatId };
           }
 
           // If no existing chat, create one
@@ -91,9 +91,9 @@ export const chatApi = createApi({
             },
           );
 
-          dispatch(setActiveChatId(newChat)); // optional
+          dispatch(setActiveChatId(newChatId)); // optional
           console.log(newChat);
-          return { data: newChat };
+          return { data: newChatId };
         } catch (error) {
           console.log(error.message);
           return { error: error.message };
