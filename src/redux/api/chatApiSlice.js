@@ -55,7 +55,7 @@ export const chatApi = createApi({
     }),
     getOrCreateChat: builder.mutation({
       async queryFn(
-        { currentUserId, targetUserId, targetUserName },
+        { currentUserId, targetUserId, targetUserName, activeChatId },
         { dispatch },
       ) {
         console.log("getOrCreateChat called");
@@ -73,27 +73,25 @@ export const chatApi = createApi({
 
           if (res.total > 0) {
             const existingChatId = res.documents[0].id;
-            dispatch(setActiveChatId(existingChatId)); // optional
             return { data: existingChatId };
           }
 
           // If no existing chat, create one
-          const newChatId = ID.unique();
+          // Because activeChatId is deterministic based on current user and target user
+          const newChatId = activeChatId;
           const newChat = await databases.createDocument(
             import.meta.env.VITE_APPWRITE_CHATDB_ID, // Database ID
             import.meta.env.VITE_APPWRITE_CHATS_COLLECTION_ID, // Collection ID
-            newChatId, // Document ID
+            ID.unique(), // Document ID
             {
-              id: newChatId,
+              chatId: newChatId, // actual chatId
               userIDs,
               createdAt: new Date().toISOString(),
               otherUserName: targetUserName,
             },
           );
 
-          dispatch(setActiveChatId(newChatId)); // optional
           console.log(newChat);
-          return { data: newChatId };
         } catch (error) {
           console.log(error.message);
           return { error: error.message };

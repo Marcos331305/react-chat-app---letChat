@@ -13,6 +13,8 @@ const MsgInput = () => {
   const dispatch = useDispatch();
   const currentUserId = useSelector((state) => state.auth.user.$id);
   const receiverUserId = useSelector((state) => state.chat.targetUser?.userId);
+  const activeChatId = useSelector((state) => state.chat?.activeChatId);
+  console.log("activeChatId: ", activeChatId);
   const receiverUserName = useSelector(
     (state) => state.chat.targetUser?.username,
   );
@@ -31,15 +33,14 @@ const MsgInput = () => {
       setMsg(""); // Immediately clear the input field
       // now do the msgSeding
       // first check the msg's chat if not then create newOne
-      const result = await getOrCreateChat({
+      await getOrCreateChat({
         currentUserId: currentUserId,
         targetUserId: receiverUserId,
         targetUserName: receiverUserName,
+        activeChatId: activeChatId,
       });
-      console.log("chatId: ", result.data.id);
-      const chatId = result.data.id;
       const msgSendingResult = await sendMsg({
-        chatId: chatId,
+        chatId: activeChatId,
         senderId: currentUserId,
         receiverId: receiverUserId,
         msg: trimmedMsg,
