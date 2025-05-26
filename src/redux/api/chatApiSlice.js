@@ -2,7 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Databases, Query, ID } from "appwrite";
 
 import appwriteClient from "@/services/appWrite";
-import { setActiveChatId, setTargetUser } from "../slices/chatSlice";
+import { setTargetUser } from "../slices/chatSlice";
+import { getSortedUserIdsAndNames } from "../../utils/chat";
 
 const databases = new Databases(appwriteClient);
 
@@ -55,14 +56,24 @@ export const chatApi = createApi({
     }),
     getOrCreateChat: builder.mutation({
       async queryFn(
-        { currentUserId, targetUserId, targetUserName, activeChatId },
+        {
+          currentUserId,
+          currentUserName,
+          targetUserId,
+          targetUserName,
+          activeChatId,
+        },
         { dispatch },
       ) {
-        console.log("getOrCreateChat called");
-        console.log("currentUserId", currentUserId);
-        console.log("targetUserId", targetUserId);
-        const userIDs = [currentUserId, targetUserId].sort(); // ensure consistent order
-
+        const currentUser = { id: currentUserId, name: currentUserName };
+        const targetUser = { id: targetUserId, name: targetUserName };
+        console.log("currentUser: ", currentUser);
+        console.log("targetUser: ", targetUser);
+        const { userIDs, userNames } = getSortedUserIdsAndNames(
+          currentUser,
+          targetUser,
+        );
+        console.log("userIDs: ", userIDs);
         try {
           // Check if chat already exists
           const res = await databases.listDocuments(
@@ -86,8 +97,8 @@ export const chatApi = createApi({
             {
               chatId: newChatId, // actual chatId
               userIDs,
+              userNames,
               createdAt: new Date().toISOString(),
-              otherUserName: targetUserName,
             },
           );
 

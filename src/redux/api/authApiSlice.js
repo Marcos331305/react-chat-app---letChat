@@ -82,6 +82,7 @@ export const authApi = createApi({
             return { error: "Email not verified" };
           }
 
+          console.log(user);
           dispatch(setUser(user)); // Store user in Redux state
           return { data: user };
         } catch (error) {

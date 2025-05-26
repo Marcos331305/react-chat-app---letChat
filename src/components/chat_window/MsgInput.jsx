@@ -18,6 +18,7 @@ const MsgInput = () => {
   const receiverUserName = useSelector(
     (state) => state.chat.targetUser?.username,
   );
+  const currentUserName = useSelector((state) => state.auth.user?.name);
   const handleSendClick = async (msg) => {
     const trimmedMsg = msg.trim();
     if (trimmedMsg) {
@@ -35,6 +36,7 @@ const MsgInput = () => {
       // first check the msg's chat if not then create newOne
       await getOrCreateChat({
         currentUserId: currentUserId,
+        currentUserName: currentUserName,
         targetUserId: receiverUserId,
         targetUserName: receiverUserName,
         activeChatId: activeChatId,

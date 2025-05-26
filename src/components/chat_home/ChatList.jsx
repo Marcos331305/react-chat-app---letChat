@@ -15,7 +15,7 @@ const ChatList = ({ searchResults, isSearching }) => {
         <ul className="divide-y">
           {listToRender?.length > 0 ? (
             listToRender.map((item) => (
-              <Chat item={item} key={item?.id || item?.userId} />
+              <Chat item={item} key={item?.chatId || item?.userId} />
             ))
           ) : (
             <div className="p-4 text-center text-muted-foreground">

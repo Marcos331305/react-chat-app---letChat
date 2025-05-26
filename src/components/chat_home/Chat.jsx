@@ -7,22 +7,17 @@ import { useGetOrCreateChatMutation } from "@/redux/api/chatApiSlice";
 const Chat = ({ item }) => {
   const navigate = useNavigate();
   const currentUserId = useSelector((state) => state.auth.user.$id);
-  const targetUserId = useSelector((state) => state.chat.targetUser?.userId);
-  const targetUserName = useSelector(
-    (state) => state.chat.targetUser?.otherUserName,
-  );
-  const [getOrCreateChat, { isLoading, error }] = useGetOrCreateChatMutation();
+  // Determine if this is an existing chat (has userIds and userNames)
+  const isExistingChat =
+    Array.isArray(item?.userIDs) && Array.isArray(item?.userNames);
+  // Get the other user's name if this is an existing chat
+  const otherUserName = isExistingChat
+    ? item.userNames[item.userIDs.findIndex((id) => id !== currentUserId)]
+    : item?.username; // fallback to search result
 
   // for clicking on a chat/searchedUser while searching
   const handleSearchSelect = async () => {
     navigate("/letchat/c");
-    // const result = await getOrCreateChat({
-    //   currentUserId,
-    //   targetUserId,
-    //   targetUserName,
-    // });
-    // if (result.data) navigate(`/c/${result.data.id}`);
-    // else toast.error(result.error);
   };
 
   return (
@@ -30,9 +25,7 @@ const Chat = ({ item }) => {
       onClick={handleSearchSelect}
       className="p-4 hover:bg-muted cursor-pointer transition"
     >
-      <p className="font-medium text-sm">
-        {item?.otherUserName || item?.username}
-      </p>
+      <p className="font-medium text-sm">{otherUserName}</p>
       {item?.lastMsg && (
         <p className="text-xs text-muted-foreground truncate">{item.lastMsg}</p>
       )}
