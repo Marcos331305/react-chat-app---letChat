@@ -14,6 +14,7 @@ export const chatSlice = createSlice({
     },
     setActiveChatId: (state, action) => {
       state.activeChatId = action.payload;
+      localStorage.setItem("activeChatId", action.payload);
     },
   },
 });

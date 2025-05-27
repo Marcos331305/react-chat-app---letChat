@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { useDispatch } from "react-redux";
 
@@ -11,15 +11,27 @@ import { setActiveChatId } from "@/redux/slices/chatSlice";
 
 const useChatId = (currentUserId, selectedUserId) => {
   const dispatch = useDispatch();
-  const chatId = useMemo(() => {
-    if (!currentUserId || !selectedUserId) return null;
 
-    // Sort to ensure consistency regardless of sender/receiver order
-    const ids = [currentUserId, selectedUserId].sort();
-    console.log("ChatId: ", `${ids[0]}_${ids[1]}`);
-    dispatch(setActiveChatId(`${ids[0]}_${ids[1]}`));
-    return `${ids[0]}_${ids[1]}`;
+  const chatId = useMemo(() => {
+    const localKey = "activeChatId";
+
+    if (selectedUserId && currentUserId) {
+      const ids = [currentUserId, selectedUserId].sort();
+      const computedChatId = `${ids[0]}_${ids[1]}`;
+      localStorage.setItem(localKey, computedChatId);
+      return computedChatId;
+    }
+
+    // If no selectedUserId, try to get last active from localStorage
+    const stored = localStorage.getItem(localKey);
+    return stored || null;
   }, [currentUserId, selectedUserId]);
+
+  useEffect(() => {
+    if (chatId) {
+      dispatch(setActiveChatId(chatId));
+    }
+  }, [chatId, dispatch]);
 
   return chatId;
 };

@@ -29,6 +29,9 @@ const ChatsHeader = ({ searchUser, searchText, setSearchText }) => {
     try {
       await logout().unwrap();
 
+      // clean up local storage
+      localStorage.removeItem("activeChatId");
+
       navigate("/auth/login", { replace: true });
     } catch (error) {
       console.error("Logout failed:", error);

@@ -26,20 +26,20 @@ const messageSlice = createSlice({
     },
     updateMessageStatus(state, action) {
       const { messageId, status } = action.payload;
-      const msg = state.list.find((m) => m.id === messageId);
+      const msg = state.messages.find((m) => m.id === messageId);
       if (msg) msg.status = status;
     },
     deleteMessage(state, action) {
       const { messageId } = action.payload;
-      state.list = state.list.filter((msg) => msg.id !== messageId);
+      state.messages = state.messages.filter((msg) => msg.id !== messageId);
     },
     setMessages(state, action) {
-      const { messages } = action.payload;
-      state.list = messages;
+      state.messages = action.payload;
+      console.log("Messages set in Redux:", state.messages);
     },
     clearMessagesForChat(state, action) {
       const { chatId } = action.payload;
-      state.list = state.list.filter((msg) => msg.chatId !== chatId);
+      state.messages = state.messages.filter((msg) => msg.chatId !== chatId);
     },
   },
 });

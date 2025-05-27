@@ -1,10 +1,9 @@
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
+import { setActiveChatId } from "@/redux/slices/chatSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
-import { useGetOrCreateChatMutation } from "@/redux/api/chatApiSlice";
-
 const Chat = ({ item }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentUserId = useSelector((state) => state.auth.user.$id);
   // Determine if this is an existing chat (has userIds and userNames)
@@ -16,13 +15,15 @@ const Chat = ({ item }) => {
     : item?.username; // fallback to search result
 
   // for clicking on a chat/searchedUser while searching
-  const handleSearchSelect = async () => {
+  const handleChatClick = async (item) => {
     navigate("/letchat/c");
+    // only set the chatId if the user is clicking on an existing chat
+    if (item.chatId) dispatch(setActiveChatId(item.chatId));
   };
 
   return (
     <li
-      onClick={handleSearchSelect}
+      onClick={()=> handleChatClick(item)}
       className="p-4 hover:bg-muted cursor-pointer transition"
     >
       <p className="font-medium text-sm">{otherUserName}</p>
