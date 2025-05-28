@@ -5,14 +5,17 @@ import useRealTimeMessages from "../../hooks/useRealtimeMessages";
 import useChatId from "../../hooks/useChatId";
 import { addMessage } from "../../redux/slices/messageSlice";
 import { useGetMessagesByChatIdQuery } from "../../redux/api/msgApiSlice";
+import { useTargetUserFromStorage } from "@/hooks/useTargetUserFromStorage";
 
 const ChatArea = () => {
   const dispatch = useDispatch();
-  const currentUserId = useSelector((state) => state.auth.user.$id);
-  const targetUserId = useSelector((state) => state.chat.targetUser?.userId);
+  const currentUserId = useSelector((state) => state.auth.user?.$id);
+  const targetUserId = useSelector((state) => state.chat.targetUserId);
   const activeChatId = useSelector((state) => state.chat.activeChatId);
   const chatIdFromhook = useChatId(currentUserId, targetUserId);
   const chatId = activeChatId || chatIdFromhook;
+  // for persisting the targetUserId and targetUserName on page reload with localStorage
+  useTargetUserFromStorage(chatId);
   // fetch messages for the current chat from the API
   const { isLoading } = useGetMessagesByChatIdQuery(chatId,{
     skip: !chatId, // Skip if chatId is not available

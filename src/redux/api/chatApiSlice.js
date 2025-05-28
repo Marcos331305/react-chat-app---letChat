@@ -2,8 +2,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Databases, Query, ID } from "appwrite";
 
 import appwriteClient from "@/services/appWrite";
-import { setTargetUser } from "../slices/chatSlice";
+import { setTargetUserId, setTargetUserName } from "../slices/chatSlice";
 import { getSortedUserIdsAndNames } from "../../utils/chat";
+import { set } from "react-hook-form";
 
 const databases = new Databases(appwriteClient);
 
@@ -46,8 +47,8 @@ export const chatApi = createApi({
               Query.notEqual("userId", currentUserId),
             ],
           );
-          dispatch(setTargetUser(response.documents[0]));
-          console.log(response.documents);
+          dispatch(setTargetUserId(response.documents[0]?.userId));
+          dispatch(setTargetUserName(response.documents[0]?.username));
           return { data: response.documents };
         } catch (err) {
           return { error: { status: "CUSTOM_ERROR", data: err.message } };

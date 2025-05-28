@@ -12,12 +12,9 @@ const MsgInput = () => {
   const [msg, setMsg] = useState("");
   const dispatch = useDispatch();
   const currentUserId = useSelector((state) => state.auth.user.$id);
-  const receiverUserId = useSelector((state) => state.chat.targetUser?.userId);
+  const receiverUserId = useSelector((state) => state.chat.targetUserId);
   const activeChatId = useSelector((state) => state.chat?.activeChatId);
-  console.log("activeChatId: ", activeChatId);
-  const receiverUserName = useSelector(
-    (state) => state.chat.targetUser?.username,
-  );
+  const receiverUserName = useSelector((state) => state.chat.targetUserName);
   const currentUserName = useSelector((state) => state.auth.user?.name);
   const handleSendClick = async (msg) => {
     const trimmedMsg = msg.trim();
@@ -29,7 +26,7 @@ const MsgInput = () => {
         addMessage({
           msg: trimmedMsg,
           senderId: currentUserId,
-        }),
+        })
       );
       setMsg(""); // Immediately clear the input field
       // now do the msgSeding
