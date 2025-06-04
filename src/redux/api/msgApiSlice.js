@@ -2,7 +2,7 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Databases, Query, ID } from "appwrite";
 
 import appwriteClient from "@/services/appWrite";
-import { setMessages } from "../slices/messageSlice";
+import { setMessages, updateMessageStatus } from "../slices/messageSlice";
 
 const databases = new Databases(appwriteClient);
 
@@ -37,19 +37,29 @@ export const msgApi = createApi({
       },
     }),
     sendMessage: builder.mutation({
-      async queryFn({ chatId, senderId, receiverId, msg }) {
+      async queryFn({ msgId, chatId, senderId, receiverId, msg }, {dispatch}) {
         try {
           const response = await databases.createDocument(
             import.meta.env.VITE_APPWRITE_CHATDB_ID, // Database ID
             import.meta.env.VITE_APPWRITE_MESSAGES_COLLECTION_ID, // Collection ID
             ID.unique(),
             {
+              msgId,
               chatId,
               senderId,
               receiverId,
               msg,
+              status: "sent", // msg Status :- Sent after DB success
             }
           );
+          // after DB success, update the message status in UI(Redux)
+          dispatch(
+            updateMessageStatus({
+              msgId: response.msgId,
+              status: "sent",
+            })
+          );
+          console.log("message sent successfully:", response);
           return { data: response };
         } catch (error) {
           return { error: { status: "CUSTOM_ERROR", message: error.message } };

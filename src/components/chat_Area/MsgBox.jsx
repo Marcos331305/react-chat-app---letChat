@@ -6,6 +6,7 @@ const MsgBox = ({ message, isSender }) => {
       type={"text"}
       text={message.msg}
       position={isSender ? "right" : "left"}
+      status={message?.status}
     />
   );
 };

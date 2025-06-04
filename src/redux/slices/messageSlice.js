@@ -1,4 +1,4 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const messageSlice = createSlice({
   name: "messages",
@@ -10,32 +10,31 @@ const messageSlice = createSlice({
       reducer(state, action) {
         state.messages.push(action.payload.message);
       },
-      prepare({ msg, senderId }) {
+      prepare({ msgId, msg, senderId, status }) {
         return {
           payload: {
             message: {
-              id: nanoid(),
+              msgId,
               msg,
               senderId,
+              status,
               createdAt: new Date().toISOString(),
-              status: "sending",
             },
           },
         };
       },
     },
     updateMessageStatus(state, action) {
-      const { messageId, status } = action.payload;
-      const msg = state.messages.find((m) => m.id === messageId);
+      const { msgId, status } = action.payload;
+      const msg = state.messages.find((m) => m.msgId === msgId);
       if (msg) msg.status = status;
     },
     deleteMessage(state, action) {
-      const { messageId } = action.payload;
-      state.messages = state.messages.filter((msg) => msg.id !== messageId);
+      const { msgId } = action.payload;
+      state.messages = state.messages.filter((msg) => msg.msgId !== msgId);
     },
     setMessages(state, action) {
       state.messages = action.payload;
-      console.log("Messages set in Redux:", state.messages);
     },
     clearMessagesForChat(state, action) {
       const { chatId } = action.payload;

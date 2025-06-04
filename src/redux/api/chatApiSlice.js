@@ -64,17 +64,13 @@ export const chatApi = createApi({
           targetUserName,
           activeChatId,
         },
-        { dispatch },
       ) {
         const currentUser = { id: currentUserId, name: currentUserName };
         const targetUser = { id: targetUserId, name: targetUserName };
-        console.log("currentUser: ", currentUser);
-        console.log("targetUser: ", targetUser);
         const { userIDs, userNames } = getSortedUserIdsAndNames(
           currentUser,
           targetUser,
         );
-        console.log("userIDs: ", userIDs);
         try {
           // Check if chat already exists
           const res = await databases.listDocuments(

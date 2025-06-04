@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { nanoid } from "@reduxjs/toolkit";
 
 import { addMessage } from "../../redux/slices/messageSlice";
 import { useGetOrCreateChatMutation } from "../../redux/api/chatApiSlice";
@@ -19,13 +20,15 @@ const MsgInput = () => {
   const handleSendClick = async (msg) => {
     const trimmedMsg = msg.trim();
     if (trimmedMsg) {
-      console.log("Sending message:", trimmedMsg);
-      console.log("SenderId", currentUserId);
+      // consistent ID for msg in Redux and Appwrite
+      const msgId = nanoid();
       // adding the msg to Redux State for optimistic UI
       dispatch(
         addMessage({
+          msgId: msgId,
           msg: trimmedMsg,
           senderId: currentUserId,
+          status: "waiting",
         })
       );
       setMsg(""); // Immediately clear the input field
@@ -39,12 +42,12 @@ const MsgInput = () => {
         activeChatId: activeChatId,
       });
       const msgSendingResult = await sendMsg({
+        msgId: msgId,
         chatId: activeChatId,
         senderId: currentUserId,
         receiverId: receiverUserId,
         msg: trimmedMsg,
       });
-      console.log("msgSendingResult: ", msgSendingResult);
     }
   };
 
