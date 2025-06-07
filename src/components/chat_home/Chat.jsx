@@ -28,7 +28,7 @@ const Chat = ({ item }) => {
       className="p-4 hover:bg-muted cursor-pointer transition flex items-center gap-3 rounded-2xl"
     >
       {/* Avatar */}
-      <Avatar>
+      <Avatar isOnline={false}>
         <AvatarImage src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
