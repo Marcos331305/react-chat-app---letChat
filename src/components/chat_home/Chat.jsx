@@ -1,6 +1,7 @@
 import { setActiveChatId } from "@/redux/slices/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const Chat = ({ item }) => {
   const dispatch = useDispatch();
@@ -23,13 +24,35 @@ const Chat = ({ item }) => {
 
   return (
     <li
-      onClick={()=> handleChatClick(item)}
-      className="p-4 hover:bg-muted cursor-pointer transition"
+      onClick={() => handleChatClick(item)}
+      className="p-4 hover:bg-muted cursor-pointer transition flex items-center gap-3 rounded-2xl"
     >
-      <p className="font-medium text-sm">{otherUserName}</p>
-      {item?.lastMsg && (
-        <p className="text-xs text-muted-foreground truncate">{item.lastMsg}</p>
-      )}
+      {/* Avatar */}
+      <Avatar>
+        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
+      {/* Name & Last Message */}
+      <div className="flex-1 min-w-0">
+        <p className="font-medium text-sm w-full truncate">{otherUserName}</p>
+        <p className="text-xs text-muted-foreground truncate w-full">
+          {item.lastMsg}
+        </p>
+      </div>
+      {/* Last Message Time & Unread Count */}
+      <div className="text-right whitespace-nowrap">
+        {/* <p className="text-[10px] text-gray-400">
+          {new Date(item.lastMsgTime).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p> */}
+        {item.unRead > 0 && (
+          <span className="bg-primary text-white rounded-full px-2 py-0.5 text-xs">
+            {item.unRead}
+          </span>
+        )}
+      </div>
     </li>
   );
 };

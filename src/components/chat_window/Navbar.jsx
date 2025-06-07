@@ -1,8 +1,10 @@
 import { ArrowLeft } from "lucide-react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = ({ username }) => {
+const Navbar = () => {
   const navigate = useNavigate();
+  const targetUserName = useSelector((state) => state.chat.targetUserName);
 
   const handleBackClick = () => {
     navigate("/letchat");
@@ -15,7 +17,7 @@ const Navbar = ({ username }) => {
           className="w-5 h-5 text-gray-700 cursor-pointer"
         />{" "}
         {/* Adjusted size & color */}
-        <h3 className="font-medium text-gray-900">{username}</h3>
+        <h3 className="font-medium text-gray-900">{targetUserName}</h3>
       </div>
     </div>
   );
